@@ -15,16 +15,51 @@ def query(payload):
     return json.loads(response.content.decode("utf-8"))
 
 
-output = query(
-    """In fiscal year 2019, we reduced our comprehensive carbon footprint for the fourth
-consecutive year—down 35 percent compared to 2015, when Apple’s carbon emissions
-peaked, even as net revenue increased by 11 percent over that same period. In the past
-year, we avoided over 10 million metric tons from our emissions reduction initiatives—like
-our Supplier Clean Energy Program, which lowered our footprint by 4.4 million metric tons.
+filename = "./dummy.txt"
+paragraphs = []
+with open(filename, "r") as f:
+    paragraphs = f.readlines()
+f.close()
 
-"""
-)
+context = []
+temp = []
+for i in range(5, len(paragraphs), 5):
+    temp = " ".join(paragraphs[0:i])
+    context.append(temp)
+context.append("".join(paragraphs[i:]))
 
+print(context)
+
+# paragraphs = input_data.split("\n\n")
+# print(paragraphs)
+
+sum_of_values = [0 for i in range(26)]
+skipped = 0
+for para in context:
+    if len(para) < 2:
+        skipped += 1
+        continue
+    try:
+        output = query(input_data)
+    except:
+        print("paragraphs are too long to be evaluated")
+    for i in range(len(output[0])):
+        sum_of_values[i] += output[0][i]["score"]
+
+values = [None for i in range(26)]
+for i in range(26):
+    values[i] = sum_of_values[i] / (len(context) - skipped)
+# output = query(input_data)
+
+
+def checksum(scores):
+    total = 0
+    for i in range(len(scores)):
+        total += scores[i]
+    print(total)
+
+
+# print(checksum(values))
 factors = [
     "business_ethics",
     "data_security",
@@ -53,10 +88,11 @@ factors = [
     "energy_management",
     "ghg_emissions",
 ]
-values = []
-for info in output[0]:
-    values.append(info["score"])
+# values = []
+# for info in output[0]:
+#     values.append(info["score"])
+
 
 data = {"factors": factors, "values": values}
 df = pd.DataFrame(data=data)
-print(df)
+print(df.to_numpy)
