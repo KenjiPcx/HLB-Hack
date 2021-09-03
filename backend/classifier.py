@@ -110,6 +110,13 @@ values_esg = [total_e, total_s, total_g]
 data = {"factors": factors_esg, "values": values_esg}
 df_merged = pd.DataFrame(data=data)
 
+
+def convert_to_whole(values):
+    total = sum(values)
+    for i in range(len(values)):
+        values[i] = values[i] / total
+
+
 factors_e = [factors[idx] for idx in e]
 factors_s = [factors[idx] for idx in s]
 factors_g = [factors[idx] for idx in g]
@@ -118,6 +125,9 @@ values_e = [values[idx] for idx in e]
 values_s = [values[idx] for idx in s]
 values_g = [values[idx] for idx in g]
 
+convert_to_whole(values_e)
+convert_to_whole(values_s)
+convert_to_whole(values_g)
 
 data_e = {"factors": factors_e, "values": values_e}
 data_s = {"factors": factors_s, "values": values_s}
