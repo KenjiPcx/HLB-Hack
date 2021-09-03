@@ -15,7 +15,7 @@ def query(payload):
     return json.loads(response.content.decode("utf-8"))
 
 
-filename = "./dummy.txt"
+filename = "dummy.txt"
 paragraphs = []
 with open(filename, "r") as f:
     paragraphs = f.readlines()
@@ -28,7 +28,7 @@ for i in range(5, len(paragraphs), 5):
     context.append(temp)
 context.append("".join(paragraphs[i:]))
 
-print(context)
+# print(context)
 
 # paragraphs = input_data.split("\n\n")
 # print(paragraphs)
@@ -40,11 +40,14 @@ for para in context:
         skipped += 1
         continue
     try:
-        output = query(input_data)
+        # print(para)
+        output = query(para)
+        for i in range(len(output[0])):
+            sum_of_values[i] += output[0][i]["score"]
     except:
+        skipped += 1
+        print(output)
         print("paragraphs are too long to be evaluated")
-    for i in range(len(output[0])):
-        sum_of_values[i] += output[0][i]["score"]
 
 values = [None for i in range(26)]
 for i in range(26):
@@ -59,7 +62,7 @@ def checksum(scores):
     print(total)
 
 
-# print(checksum(values))
+print(checksum(values))
 factors = [
     "business_ethics",
     "data_security",
@@ -94,5 +97,27 @@ factors = [
 
 
 data = {"factors": factors, "values": values}
-df = pd.DataFrame(data=data)
-print(df.to_numpy)
+df_unmerged = pd.DataFrame(data=data)
+
+e = [13, 15, 19, 20, 21, 23, 24, 25, 17]
+s = [2, 8, 9, 10, 6, 11, 14, 16]
+g = [0, 1, 3, 4, 5, 7, 12, 18, 22]
+
+values_e = 0
+values_s = 0
+values_g = 0
+for idx in e:
+    values_e += df_unmerged.iloc[idx, 1]
+for idx in s:
+    values_s += df_unmerged.iloc[idx, 1]
+for idx in g:
+    values_g += df_unmerged.iloc[idx, 1]
+
+
+factors = ["e", "s", "g"]
+values = [values_e, values_s, values_g]
+data = {"factors": factors, "values": values}
+df_merged = pd.DataFrame(data=data)
+
+
+print(df_merged.to_numpy)
