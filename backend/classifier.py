@@ -28,11 +28,6 @@ for i in range(5, len(paragraphs), 5):
     context.append(temp)
 context.append("".join(paragraphs[i:]))
 
-# print(context)
-
-# paragraphs = input_data.split("\n\n")
-# print(paragraphs)
-
 sum_of_values = [0 for i in range(26)]
 skipped = 0
 for para in context:
@@ -62,7 +57,6 @@ def checksum(scores):
     print(total)
 
 
-print(checksum(values))
 factors = [
     "business_ethics",
     "data_security",
@@ -91,9 +85,6 @@ factors = [
     "energy_management",
     "ghg_emissions",
 ]
-# values = []
-# for info in output[0]:
-#     values.append(info["score"])
 
 
 data = {"factors": factors, "values": values}
@@ -103,21 +94,43 @@ e = [13, 15, 19, 20, 21, 23, 24, 25, 17]
 s = [2, 8, 9, 10, 6, 11, 14, 16]
 g = [0, 1, 3, 4, 5, 7, 12, 18, 22]
 
-values_e = 0
-values_s = 0
-values_g = 0
+total_e = 0
+total_s = 0
+total_g = 0
 for idx in e:
-    values_e += df_unmerged.iloc[idx, 1]
+    total_e += df_unmerged.iloc[idx, 1]
 for idx in s:
-    values_s += df_unmerged.iloc[idx, 1]
+    total_s += df_unmerged.iloc[idx, 1]
 for idx in g:
-    values_g += df_unmerged.iloc[idx, 1]
+    total_g += df_unmerged.iloc[idx, 1]
 
 
-factors = ["e", "s", "g"]
-values = [values_e, values_s, values_g]
-data = {"factors": factors, "values": values}
+factors_esg = ["e", "s", "g"]
+values_esg = [total_e, total_s, total_g]
+data = {"factors": factors_esg, "values": values_esg}
 df_merged = pd.DataFrame(data=data)
 
+factors_e = [factors[idx] for idx in e]
+factors_s = [factors[idx] for idx in s]
+factors_g = [factors[idx] for idx in g]
 
-print(df_merged.to_numpy)
+values_e = [values[idx] for idx in e]
+values_s = [values[idx] for idx in s]
+values_g = [values[idx] for idx in g]
+
+
+data_e = {"factors": factors_e, "values": values_e}
+data_s = {"factors": factors_s, "values": values_s}
+data_g = {"factors": factors_g, "values": values_g}
+
+df_e = pd.DataFrame(data=data_e)
+df_s = pd.DataFrame(data=data_s)
+df_g = pd.DataFrame(data=data_g)
+
+
+# output
+print(df_unmerged)
+print(df_merged)
+print(df_e)
+print(df_s)
+print(df_g)
