@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { Display } from "./MainContent";
 import axios from "axios";
 
@@ -20,34 +22,34 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
       companyName: companyName,
       files: files,
     };
-    try {
-      const res = await axios.post(URL, data);
-      setDisplay((displayData: Display) => {
-        return {
-          ...displayData,
-          res: res.data.labels as any[],
-          showRes: true,
-          loading: false,
-        };
-      });
-    } catch (e) {
-      console.log(e);
-      setDisplay((displayData: Display) => {
-        return {
-          ...displayData,
-          showRes: false,
-          loading: false,
-        };
-      });
-      setError(true);
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
-    }
+    // try {
+    // const res = await axios.post(URL, data);
+    setDisplay((displayData: Display) => {
+      return {
+        ...displayData,
+        // res: res.data.labels as any[],
+        showRes: true,
+        loading: false,
+      };
+    });
+    // } catch (e) {
+    //   console.log(e);
+    //   setDisplay((displayData: Display) => {
+    //     return {
+    //       ...displayData,
+    //       showRes: false,
+    //       loading: false,
+    //     };
+    //   });
+    //   setError(true);
+    //   setTimeout(() => {
+    //     setError(false);
+    //   }, 3000);
+    // }
   };
 
   return (
-    <>
+    <Col xs={11} sm={11} md={9} lg={5} xl={5}>
       <Form className="companyForm">
         <Form.Group
           controlId="formBasicEmail"
@@ -88,7 +90,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           {error ? "Failed" : "Calculate ESG Score"}
         </Button>
       </Form>
-    </>
+    </Col>
   );
 }
 

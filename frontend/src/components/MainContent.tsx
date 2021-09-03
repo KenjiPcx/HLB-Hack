@@ -21,7 +21,7 @@ function MainContent() {
     if (display.loading) {
       return <Spinner animation="border" />;
     } else if (display.showRes) {
-      return <Stats />;
+      return <Stats res={display.res} />;
     } else {
       return <Instructions setDisplay={setDisplay} />;
     }
