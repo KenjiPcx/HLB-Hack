@@ -17,11 +17,11 @@
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  padding: 2rem 0
+  padding: 2rem 0;
 }
 
 .infoContainer {
-  height: 70%;
+  height: 72.5%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -29,5 +29,13 @@
   align-items: center;
   text-align: center;
   border-radius: 20px;
-  background-color: rgba($color: #C4C4C4, $alpha: 0.25);
+  background-color: rgba($color: rgb(204, 204, 204), $alpha: 0.25);
+}
+
+.companyForm {
+  width: 30%;
+  height: 80%;
+  background-color: white;
+  padding: 30px 20px;
+  border-radius: 10px;
 }
