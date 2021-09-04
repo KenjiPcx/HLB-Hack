@@ -3,18 +3,19 @@ import Instructions from "./CompanyForm";
 import Stats from "./Stats";
 import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
+import { displayPartsToString } from "typescript";
 
 export type Display = {
   showRes: boolean;
   loading: boolean;
-  res: any[];
+  res: any;
 };
 
 function MainContent() {
   const [display, setDisplay] = useState<Display>({
     showRes: false,
     loading: false,
-    res: [],
+    res: null,
   });
 
   const resetPage = () => {
@@ -23,7 +24,7 @@ function MainContent() {
         ...displayData,
         showRes: false,
         loading: false,
-        res: [],
+        res: null,
       };
     });
   };
@@ -32,7 +33,7 @@ function MainContent() {
     if (display.loading) {
       return <Spinner animation="border" />;
     } else if (display.showRes) {
-      return <Stats res={display.res} />;
+      return <Stats res={display.res} showRes={display.showRes} />;
     } else {
       return <Instructions setDisplay={setDisplay} />;
     }

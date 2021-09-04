@@ -18,17 +18,22 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
   const [error, setError] = useState(false);
 
   const handleSubmit = async () => {
-    const data = {
-      companyName: companyName,
-      files: files,
-    };
+    const formData = new FormData();
+    formData.append("companyName", companyName);
+    files.forEach((file, i) => formData.append(`file${i}`, file));
     try {
-      const res = await axios.post(URL, data);
-      console.log(res);
       setDisplay((displayData: Display) => {
         return {
           ...displayData,
-          // res: res.data.labels as any[],
+          loading: true,
+        };
+      });
+      const res = await axios.post(URL, formData);
+      console.log(res)
+      setDisplay((displayData: Display) => {
+        return {
+          ...displayData,
+          res: res.data,
           showRes: true,
           loading: false,
         };
