@@ -179,7 +179,7 @@ def main(input_data, size):
     combine.sort(reverse=True)
     combine_without_null = remove_null_scores(combine[:5])
     # print(combine)
-    factors_sorted = [factors for factors, esg_most_points in combine_without_null]
+    factors_sorted = [factors for esg_most_points, factors in combine_without_null]
     print(factors_sorted)
 
     df_unmerged = df_unmerged.values.tolist()
@@ -208,6 +208,5 @@ it that drives our 379,000 employees to give their best every day? The answers t
 We defined that purpose as our aspiration to provide innovations that improve quality of life and create value for 
 people all over the world. We make real what matters. And every Siemens business will serve this purpose, for all our 
 stakeholders  for investors, employees, customers, partners, and societies alike. 
-
 """
     main(input_data, 5)
