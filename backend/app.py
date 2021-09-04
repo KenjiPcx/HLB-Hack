@@ -70,3 +70,12 @@ def foo():
     res = classifier.main(pdfText, 3)
     res["companyName"] = name
     return jsonify(res)
+
+@app.route('/bar', methods=['POST']) 
+def bar():
+    name = request.form.get("companyName")
+    pdfText = request.form.get("text")
+    
+    res = classifier.main(pdfText, 3)
+    res["companyName"] = name
+    return jsonify(res)

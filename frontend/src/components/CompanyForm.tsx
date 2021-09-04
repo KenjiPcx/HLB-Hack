@@ -11,16 +11,30 @@ interface CompanyFormProps {
 }
 
 function CompanyForm({ setDisplay }: CompanyFormProps) {
-  const URL = "http://127.0.0.1:5000/foo";
+  const fooURL = "http://127.0.0.1:5000/foo";
+  const barURL = "http://127.0.0.1:5000/bar";
 
   const [companyName, setCompanyName] = useState("");
+  const [usePdf, setUsePdf] = useState(false);
+  const [text, setText] = useState("");
   const [files, setFiles] = useState([] as File[]);
   const [error, setError] = useState(false);
 
   const handleSubmit = async () => {
+    if (files.length === 0 && text === "") {
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+      return;
+    }
     const formData = new FormData();
     formData.append("companyName", companyName);
-    files.forEach((file, i) => formData.append(`file${i}`, file));
+    if (usePdf) {
+      files.forEach((file, i) => formData.append(`file${i}`, file));
+    } else {
+      formData.append("text", text);
+    }
     try {
       setDisplay((displayData: Display) => {
         return {
@@ -28,8 +42,8 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           loading: true,
         };
       });
+      const URL: string = usePdf ? fooURL : barURL;
       const res = await axios.post(URL, formData);
-      console.log(res);
       setDisplay((displayData: Display) => {
         return {
           ...displayData,
@@ -39,7 +53,6 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
         };
       });
     } catch (e) {
-      console.log(e);
       setDisplay((displayData: Display) => {
         return {
           ...displayData,
@@ -47,10 +60,6 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           loading: false,
         };
       });
-      setError(true);
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
     }
   };
 
@@ -74,26 +83,48 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
             placeholder="Company Name"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
+            required
           />
           <Form.Text className="text-muted">The Name of the Company.</Form.Text>
         </Form.Group>
 
-        <Form.Group
-          controlId="formFileMultiple"
-          className="mb-4"
-          style={{ textAlign: "left" }}
-        >
-          <Form.Label>Company Info Pdf</Form.Label>
-          <Form.Control
-            type="file"
-            multiple
-            accept=".pdf"
-            onChange={(e: any) => setFiles(Array.from(e.target.files))}
-          />
-          <Form.Text className="text-muted">
-            You can upload more than 1 file
-          </Form.Text>
-        </Form.Group>
+        {usePdf ? (
+          <Form.Group
+            controlId="formFileMultiple"
+            className="mb-4"
+            style={{ textAlign: "left" }}
+          >
+            <Form.Label>Company Info Pdf</Form.Label>
+            <Button size="sm" variant="link" onClick={() => setUsePdf(false)}>
+              Use Text?
+            </Button>
+            <Form.Control
+              type="file"
+              multiple
+              accept=".pdf"
+              onChange={(e: any) => setFiles(Array.from(e.target.files))}
+            />
+            <Form.Text className="text-muted">
+              You can upload more than 1 file
+            </Form.Text>
+          </Form.Group>
+        ) : (
+          <Form.Group
+            className="mb-4"
+            controlId="exampleForm.ControlTextarea1"
+            style={{ textAlign: "left" }}
+          >
+            <Form.Label>Example textarea</Form.Label>
+            <Button size="sm" variant="link" onClick={() => setUsePdf(true)}>
+              Use Pdf?
+            </Button>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </Form.Group>
+        )}
         <Button
           disabled={error}
           variant={error ? "danger" : "primary"}

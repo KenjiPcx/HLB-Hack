@@ -19,9 +19,6 @@ type ChartOptions = {
 
 function Stats({ res, showRes }: StatsProps) {
   const [page, setPage] = useState(0);
-  if (res) {
-    console.log(res.res);
-  }
 
   const getSeriesAndLabels = (field: any) => {
     let series: string[] = [];
@@ -122,10 +119,6 @@ function Stats({ res, showRes }: StatsProps) {
         return;
     }
   };
-
-  useEffect(() => {
-    console.log(res);
-  }, [res]);
 
   return (
     <Container className="stats">
