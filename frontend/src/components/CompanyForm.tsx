@@ -11,41 +11,47 @@ interface CompanyFormProps {
 }
 
 function CompanyForm({ setDisplay }: CompanyFormProps) {
-  const URL = "";
+  const URL = "http://127.0.0.1:5000/foo";
 
   const [companyName, setCompanyName] = useState("");
   const [files, setFiles] = useState([] as File[]);
   const [error, setError] = useState(false);
 
   const handleSubmit = async () => {
-    const data = {
-      companyName: companyName,
-      files: files,
-    };
-    // try {
-    // const res = await axios.post(URL, data);
-    setDisplay((displayData: Display) => {
-      return {
-        ...displayData,
-        // res: res.data.labels as any[],
-        showRes: true,
-        loading: false,
-      };
-    });
-    // } catch (e) {
-    //   console.log(e);
-    //   setDisplay((displayData: Display) => {
-    //     return {
-    //       ...displayData,
-    //       showRes: false,
-    //       loading: false,
-    //     };
-    //   });
-    //   setError(true);
-    //   setTimeout(() => {
-    //     setError(false);
-    //   }, 3000);
-    // }
+    const formData = new FormData();
+    formData.append("companyName", companyName);
+    files.forEach((file, i) => formData.append(`file${i}`, file));
+    try {
+      setDisplay((displayData: Display) => {
+        return {
+          ...displayData,
+          loading: true,
+        };
+      });
+      const res = await axios.post(URL, formData);
+      console.log(res)
+      setDisplay((displayData: Display) => {
+        return {
+          ...displayData,
+          res: res.data,
+          showRes: true,
+          loading: false,
+        };
+      });
+    } catch (e) {
+      console.log(e);
+      setDisplay((displayData: Display) => {
+        return {
+          ...displayData,
+          showRes: false,
+          loading: false,
+        };
+      });
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
   };
 
   return (
