@@ -39,9 +39,6 @@ def main(input_data, size):
     esg_most_points = [0 for x in range(26)]
 
     for para in context:
-        if len(para) < 2:
-            skipped += 1
-            continue
         try:
             # print(para)
             output = query(para)
@@ -65,7 +62,7 @@ def main(input_data, size):
 
     values = [None for i in range(26)]
     for i in range(26):
-        values[i] = sum_of_values[i] / (len(context) - skipped)
+        values[i] = sum_of_values[i] / (len(context))
     # output = query(input_data)
 
     def checksum(scores):
@@ -211,5 +208,6 @@ it that drives our 379,000 employees to give their best every day? The answers t
 We defined that purpose as our aspiration to provide innovations that improve quality of life and create value for 
 people all over the world. We make real what matters. And every Siemens business will serve this purpose, for all our 
 stakeholders  for investors, employees, customers, partners, and societies alike. 
+
 """
     main(input_data, 5)
