@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 
 
-def main(filename, size):
+def main(input_data, size):
     API_URL = "https://api-inference.huggingface.co/models/limivan/bert-esg"
     url = "https://huggingface.co/limivan/bert-esg"
     API_TOKEN = "api_NyUsmLJdCTDdyjRIKxaSEigKVGRWZYRoIL"
@@ -16,10 +16,12 @@ def main(filename, size):
         return json.loads(response.content.decode("utf-8"))
 
     # filename = "dummy.txt"
-    paragraphs = []
-    with open(filename, "r") as f:
-        paragraphs = f.readlines()
-    f.close()
+    # paragraphs = []
+    # with open(filename, "r") as f:
+    #     paragraphs = f.readlines()
+    # f.close()
+
+    paragraphs = input_data.split("\n")
 
     context = []
     temp = []
@@ -183,18 +185,31 @@ def main(filename, size):
     factors_sorted = [factors for esg_most_points, factors in combine_without_null]
     print(factors_sorted)
 
-    return (
-        df_unmerged.to_numpy,
-        df_merged.to_numpy,
-        df_e.to_numpy,
-        df_s.to_numpy,
-        df_g.to_numpy,
-        e_points,
-        s_points,
-        g_points,
-        factors_sorted,
-    )
+    df_unmerged = df_unmerged.values.tolist()
+    df_merged = df_merged.values.tolist()
+    df_e = df_e.values.tolist()
+    df_s = df_s.values.tolist()
+    df_g = df_g.values.tolist()
+
+    return_json_obj = {
+        "unmerged": df_unmerged,
+        "merged": df_merged,
+        "enviromental": df_e,
+        "social": df_s,
+        "governance": df_g,
+        "esg_points": [e_points, s_points, g_points],
+        "top_5_factors": factors_sorted,
+    }
+
+    return json.dumps(return_json_obj)
 
 
 if __name__ == "__main__":
-    main("./dummy.txt", 4)
+    input_data = """
+    Even with a 171-year history, we at Siemens keep asking ourselves: What kind of company do we want to be? What is 
+it that drives our 379,000 employees to give their best every day? The answers to these questions lie in our purpose. 
+We defined that purpose as our aspiration to provide innovations that improve quality of life and create value for 
+people all over the world. We make real what matters. And every Siemens business will serve this purpose, for all our 
+stakeholders  for investors, employees, customers, partners, and societies alike. 
+"""
+    main(input_data, 5)
