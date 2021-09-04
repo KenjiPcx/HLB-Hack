@@ -61,7 +61,7 @@ def main(input_data, size):
             tensor_full = True
             skipped += 1
             print(output)
-            print("paragraphs are too long to be evaluated")
+            print("Tensor size reached maximum capacity")
 
     values = [None for i in range(26)]
     for i in range(26):
