@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 
 
-def main(filename):
+def main(filename, size):
     API_URL = "https://api-inference.huggingface.co/models/limivan/bert-esg"
     url = "https://huggingface.co/limivan/bert-esg"
     API_TOKEN = "api_NyUsmLJdCTDdyjRIKxaSEigKVGRWZYRoIL"
@@ -23,13 +23,19 @@ def main(filename):
 
     context = []
     temp = []
-    for i in range(5, len(paragraphs), 5):
+    # size = 2
+    num_of_lines_read = 0
+    tensor_full = False
+    for i in range(size, len(paragraphs), size):
         temp = " ".join(paragraphs[0:i])
         context.append(temp)
     context.append("".join(paragraphs[i:]))
 
     sum_of_values = [0 for i in range(26)]
     skipped = 0
+
+    esg_most_points = [0 for x in range(26)]
+
     for para in context:
         if len(para) < 2:
             skipped += 1
@@ -37,9 +43,20 @@ def main(filename):
         try:
             # print(para)
             output = query(para)
+            max_idx = 0
+            max_score = 0
             for i in range(len(output[0])):
+                if output[0][i]["score"] > max_score:
+                    max_score = output[0][i]["score"]
+                    max_idx = i
                 sum_of_values[i] += output[0][i]["score"]
+
+            esg_most_points[max_idx] += 1
+            if not tensor_full:
+                num_of_lines_read += 1
+
         except:
+            tensor_full = True
             skipped += 1
             print(output)
             print("paragraphs are too long to be evaluated")
@@ -131,12 +148,40 @@ def main(filename):
     df_s = pd.DataFrame(data=data_s)
     df_g = pd.DataFrame(data=data_g)
 
+    # compute scoring scale
+    print(esg_most_points)
+    e_points = 0
+    s_points = 0
+    g_points = 0
+    for idx in e:
+        e_points += esg_most_points[idx]
+    for idx in s:
+        s_points += esg_most_points[idx]
+    for idx in g:
+        g_points += esg_most_points[idx]
+
+    print(e_points, s_points, g_points)
+
     # output
-    print(df_unmerged.to_numpy)
-    print(df_merged.to_numpy)
-    print(df_e.to_numpy)
-    print(df_s.to_numpy)
-    print(df_g.to_numpy)
+    # print(df_unmerged.to_numpy)
+    # print(df_merged.to_numpy)
+    # print(df_e.to_numpy)
+    # print(df_s.to_numpy)
+    # print(df_g.to_numpy)
+
+    # compute top 3/5
+    def remove_null_scores(lst):
+        for i in range(len(lst) - 1, -1, -1):
+            if lst[i] == 0:
+                lst.pop()
+        return lst
+
+    combine = list(zip(esg_most_points, factors))
+    combine.sort(reverse=True)
+    combine_without_null = remove_null_scores(combine[:5])
+    # print(combine)
+    factors_sorted = [factors for esg_most_points, factors in combine_without_null]
+    print(factors_sorted)
 
     return (
         df_unmerged.to_numpy,
@@ -144,8 +189,12 @@ def main(filename):
         df_e.to_numpy,
         df_s.to_numpy,
         df_g.to_numpy,
+        e_points,
+        s_points,
+        g_points,
+        factors_sorted,
     )
 
 
 if __name__ == "__main__":
-    main("dummy.txt")
+    main("./dummy.txt", 4)
