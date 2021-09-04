@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Container from "react-bootstrap/Container";
 import ReactApexChart from "react-apexcharts";
 
@@ -29,7 +30,6 @@ function Stats({ res }: StatsProps) {
               series={state.series}
               type="pie"
               className="chart"
-              width={500}
             />
           </>
         );
@@ -42,7 +42,6 @@ function Stats({ res }: StatsProps) {
               series={state.series}
               type="radar"
               className="chart"
-              width={500}
             />
           </>
         );
@@ -55,7 +54,6 @@ function Stats({ res }: StatsProps) {
               series={state.series}
               type="pie"
               className="chart"
-              width={500}
             />
           </>
         );
@@ -68,7 +66,6 @@ function Stats({ res }: StatsProps) {
               series={state.series}
               type="pie"
               className="chart"
-              width={500}
             />
           </>
         );
@@ -80,6 +77,14 @@ function Stats({ res }: StatsProps) {
   return (
     <Container className="stats">
       {renderGraphs()}
+      <Fab
+        color="primary"
+        aria-label="add"
+        sx={{ position: "absolute", bottom: 15, left: 15 }}
+        onClick={() => setPage((page) => page - 1)}
+      >
+        <ArrowBackIosIcon />
+      </Fab>
       <Fab
         color="primary"
         aria-label="add"

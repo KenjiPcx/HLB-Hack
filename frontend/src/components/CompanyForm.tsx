@@ -11,7 +11,7 @@ interface CompanyFormProps {
 }
 
 function CompanyForm({ setDisplay }: CompanyFormProps) {
-  const URL = "";
+  const URL = "http://127.0.0.1:5000/foo";
 
   const [companyName, setCompanyName] = useState("");
   const [files, setFiles] = useState([] as File[]);
@@ -22,30 +22,31 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
       companyName: companyName,
       files: files,
     };
-    // try {
-    // const res = await axios.post(URL, data);
-    setDisplay((displayData: Display) => {
-      return {
-        ...displayData,
-        // res: res.data.labels as any[],
-        showRes: true,
-        loading: false,
-      };
-    });
-    // } catch (e) {
-    //   console.log(e);
-    //   setDisplay((displayData: Display) => {
-    //     return {
-    //       ...displayData,
-    //       showRes: false,
-    //       loading: false,
-    //     };
-    //   });
-    //   setError(true);
-    //   setTimeout(() => {
-    //     setError(false);
-    //   }, 3000);
-    // }
+    try {
+      const res = await axios.post(URL, data);
+      console.log(res);
+      setDisplay((displayData: Display) => {
+        return {
+          ...displayData,
+          // res: res.data.labels as any[],
+          showRes: true,
+          loading: false,
+        };
+      });
+    } catch (e) {
+      console.log(e);
+      setDisplay((displayData: Display) => {
+        return {
+          ...displayData,
+          showRes: false,
+          loading: false,
+        };
+      });
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
   };
 
   return (

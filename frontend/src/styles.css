@@ -81,4 +81,9 @@
       -ms-flex-pack: center;
           justify-content: center;
 }
+
+.chart {
+  width: 100%;
+  max-width: 500px;
+}
 /*# sourceMappingURL=styles.css.map */

@@ -17,6 +17,17 @@ function MainContent() {
     res: [],
   });
 
+  const resetPage = () => {
+    setDisplay((displayData: Display) => {
+      return {
+        ...displayData,
+        showRes: false,
+        loading: false,
+        res: [],
+      };
+    });
+  };
+
   const displayData = () => {
     if (display.loading) {
       return <Spinner animation="border" />;
@@ -29,7 +40,7 @@ function MainContent() {
 
   return (
     <Container className="mainContent">
-      <div>
+      <div onClick={resetPage}>
         <h2>ESG Judger</h2>
         <div>Judge How ESG Friendly Companies Are</div>
       </div>
