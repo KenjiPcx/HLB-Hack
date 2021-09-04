@@ -57,6 +57,15 @@ def get_pdf_text(pdf_path):
     cleaned_text = preprocess_pdf_str(text)
     return cleaned_text
 
+def get_site_text(site_url):
+    """ Return all paragraph text from a website.
+    """
+    page = requests.get(site_url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    text_lst = soup.find_all('p')
+    text = '\n'.join([p.get_text().replace('\n', ' ') for p in text_lst])
+    return text
+
 @app.route('/foo', methods=['POST']) 
 def foo():
     name = request.form.get("companyName")
@@ -67,6 +76,15 @@ def foo():
         dir = f"{uploads_dir}\\{file.filename}"
         pdfText += get_pdf_text(dir)
 
+    res = classifier.main(pdfText, 3)
+    res["companyName"] = name
+    return jsonify(res)
+
+@app.route('/bar', methods=['POST']) 
+def bar():
+    name = request.form.get("companyName")
+    pdfText = request.form.get("text")
+    
     res = classifier.main(pdfText, 3)
     res["companyName"] = name
     return jsonify(res)
