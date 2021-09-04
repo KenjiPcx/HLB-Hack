@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import requests
 import classifier
 from flask_cors import CORS
 
@@ -13,7 +14,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 import pdfminer
-import asyncio
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 CORS(app)
@@ -66,8 +67,8 @@ def get_site_text(site_url):
     text = '\n'.join([p.get_text().replace('\n', ' ') for p in text_lst])
     return text
 
-@app.route('/foo', methods=['POST']) 
-def foo():
+@app.route('/pdf', methods=['POST']) 
+def pdf():
     name = request.form.get("companyName")
     pdfText = ""
     for i in range(len(request.files)):
@@ -80,10 +81,20 @@ def foo():
     res["companyName"] = name
     return jsonify(res)
 
-@app.route('/bar', methods=['POST']) 
-def bar():
+@app.route('/text', methods=['POST']) 
+def text():
     name = request.form.get("companyName")
-    pdfText = request.form.get("text")
+    text = request.form.get("text")
+    
+    res = classifier.main(text, 3)
+    res["companyName"] = name
+    return jsonify(res)
+
+@app.route('/url', methods=['POST']) 
+def url():
+    name = request.form.get("companyName")
+    url = request.form.get("url")
+    pdfText = get_site_text(url)
     
     res = classifier.main(pdfText, 3)
     res["companyName"] = name

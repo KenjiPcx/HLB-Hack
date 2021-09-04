@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -11,17 +11,77 @@ interface CompanyFormProps {
 }
 
 function CompanyForm({ setDisplay }: CompanyFormProps) {
-  const fooURL = "http://127.0.0.1:5000/foo";
-  const barURL = "http://127.0.0.1:5000/bar";
-
   const [companyName, setCompanyName] = useState("");
-  const [usePdf, setUsePdf] = useState(false);
-  const [text, setText] = useState("");
+  const [type, setType] = useState("pdf");
   const [files, setFiles] = useState([] as File[]);
+  const [text, setText] = useState("");
+  const [url, setUrl] = useState("");
   const [error, setError] = useState(false);
 
+  const uploadType = () => {
+    switch (type) {
+      case "pdf":
+        return (
+          <Form.Group
+            controlId="formFileMultiple"
+            className="mb-4"
+            style={{ textAlign: "left" }}
+          >
+            <Form.Label>Company Info Pdf</Form.Label>
+            <Form.Control
+              type="file"
+              multiple
+              accept=".pdf"
+              onChange={(e: any) => setFiles(Array.from(e.target.files))}
+            />
+            <Form.Text className="text-muted">
+              You can upload more than 1 file
+            </Form.Text>
+          </Form.Group>
+        );
+      case "text":
+        return (
+          <Form.Group
+            className="mb-4"
+            controlId="exampleForm.ControlTextarea1"
+            style={{ textAlign: "left" }}
+          >
+            <Form.Label>Enter Short Text</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={2}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </Form.Group>
+        );
+      case "url":
+        return (
+          <Form.Group
+            controlId="formWebsiteUrl"
+            className="mb-4"
+            style={{ textAlign: "left" }}
+          >
+            <Form.Label>Website Url</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Website Url"
+              onChange={(e) => setUrl(e.target.value)}
+              required
+            />
+            <Form.Text className="text-muted">
+              The Url of the Website.
+            </Form.Text>
+          </Form.Group>
+        );
+    }
+  };
+
   const handleSubmit = async () => {
-    if (files.length === 0 && text === "") {
+    if (
+      (type === "pdf" && files.length === 0) ||
+      (type === "text" && text === "") ||
+      (type === "url" && url === "")
+    ) {
       setError(true);
       setTimeout(() => {
         setError(false);
@@ -30,10 +90,12 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
     }
     const formData = new FormData();
     formData.append("companyName", companyName);
-    if (usePdf) {
+    if (type === "pdf") {
       files.forEach((file, i) => formData.append(`file${i}`, file));
-    } else {
+    } else if (type === "text") {
       formData.append("text", text);
+    } else {
+      formData.append("url", url);
     }
     try {
       setDisplay((displayData: Display) => {
@@ -42,7 +104,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           loading: true,
         };
       });
-      const URL: string = usePdf ? fooURL : barURL;
+      const URL: string = `http://127.0.0.1:5000/${type}`;
       const res = await axios.post(URL, formData);
       setDisplay((displayData: Display) => {
         return {
@@ -64,7 +126,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
   };
 
   return (
-    <Col xs={11} sm={11} md={9} lg={5} xl={5}>
+    <Col md={9} lg={5} xl={5}>
       <Form
         className="companyForm"
         onSubmit={(e) => {
@@ -87,44 +149,25 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           />
           <Form.Text className="text-muted">The Name of the Company.</Form.Text>
         </Form.Group>
-
-        {usePdf ? (
-          <Form.Group
-            controlId="formFileMultiple"
-            className="mb-4"
-            style={{ textAlign: "left" }}
+        <Form.Group
+          controlId="formBasicSelect"
+          className="mb-4"
+          style={{ textAlign: "left" }}
+        >
+          <Form.Label>Select Norm Type</Form.Label>
+          <Form.Control
+            as="select"
+            value={type}
+            onChange={(e) => {
+              setType(e.target.value);
+            }}
           >
-            <Form.Label>Company Info Pdf</Form.Label>
-            <Button size="sm" variant="link" onClick={() => setUsePdf(false)}>
-              Use Text?
-            </Button>
-            <Form.Control
-              type="file"
-              multiple
-              accept=".pdf"
-              onChange={(e: any) => setFiles(Array.from(e.target.files))}
-            />
-            <Form.Text className="text-muted">
-              You can upload more than 1 file
-            </Form.Text>
-          </Form.Group>
-        ) : (
-          <Form.Group
-            className="mb-4"
-            controlId="exampleForm.ControlTextarea1"
-            style={{ textAlign: "left" }}
-          >
-            <Form.Label>Example textarea</Form.Label>
-            <Button size="sm" variant="link" onClick={() => setUsePdf(true)}>
-              Use Pdf?
-            </Button>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              onChange={(e) => setText(e.target.value)}
-            />
-          </Form.Group>
-        )}
+            <option value="pdf">Upload PDF File</option>
+            <option value="text">Text</option>
+            <option value="url">Website URL</option>
+          </Form.Control>
+        </Form.Group>
+        {uploadType()}
         <Button
           disabled={error}
           variant={error ? "danger" : "primary"}
