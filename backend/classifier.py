@@ -171,7 +171,7 @@ def main(input_data, size):
     # compute top 3/5
     def remove_null_scores(lst):
         for i in range(len(lst) - 1, -1, -1):
-            if lst[i] == 0:
+            if lst[i][0] == 0:
                 lst.pop()
         return lst
 
@@ -179,7 +179,7 @@ def main(input_data, size):
     combine.sort(reverse=True)
     combine_without_null = remove_null_scores(combine[:5])
     # print(combine)
-    factors_sorted = [factors for esg_most_points, factors in combine_without_null]
+    factors_sorted = [factors for factors, esg_most_points in combine_without_null]
     print(factors_sorted)
 
     df_unmerged = df_unmerged.values.tolist()
