@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Paragraph from "./Paragraph";
 import ReactApexChart from "react-apexcharts";
+import Form from "react-bootstrap/Form";
 
 interface StatsProps {
   res: any;
@@ -17,8 +18,31 @@ type ChartOptions = {
   labels: any[];
 };
 
+type ParagraphObj = {
+  paragraph: string;
+  tag: string;
+};
+
 function Stats({ res, showRes }: StatsProps) {
   const [page, setPage] = useState(0);
+  const [label, setLabel] = useState("");
+
+  const getLabels = (data: ParagraphObj[]) => {
+    const labels: string[] = [];
+    data.forEach((paragraph) => {
+      if (!labels.includes(paragraph.tag)) {
+        labels.push(paragraph.tag);
+      }
+    });
+    return labels;
+  };
+
+  const filterData = (data: ParagraphObj[]) => {
+    if (label === "") {
+      return data;
+    }
+    return data.filter((paragraph) => paragraph.tag === label);
+  };
 
   const getSeriesAndLabels = (field: any) => {
     let series: string[] = [];
@@ -39,7 +63,52 @@ function Stats({ res, showRes }: StatsProps) {
     if (!showRes) return "";
     let chartData;
     switch (page) {
+      case -1:
+        setPage(5);
+        return;
       case 0:
+        const labels = getLabels(res.data);
+        const paragraphs = filterData(res.data);
+        return (
+          <>
+            <Form.Group
+              controlId="formBasicSelect"
+              className="mb-4"
+              style={{ textAlign: "left" }}
+            >
+              <Form.Control
+                as="select"
+                value={label}
+                onChange={(e) => {
+                  setLabel(e.target.value);
+                }}
+              >
+                <option value={""} key={-1}>
+                  All Labels
+                </option>
+                {labels.map((label: string, key: number) => {
+                  return (
+                    <option value={label} key={key}>
+                      {label}
+                    </option>
+                  );
+                })}
+              </Form.Control>
+            </Form.Group>
+            <Container className="textDisplay">
+              {paragraphs.map((paragraph: ParagraphObj, key: number) => {
+                return (
+                  <Paragraph
+                    key={key}
+                    paragraph={paragraph.paragraph}
+                    tag={paragraph.tag}
+                  />
+                );
+              })}
+            </Container>
+          </>
+        );
+      case 1:
         chartData = getSeriesAndLabels(res.merged);
         return (
           <>
@@ -53,7 +122,7 @@ function Stats({ res, showRes }: StatsProps) {
             />
           </>
         );
-      case 1:
+      case 2:
         chartData = getSeriesAndLabels(res.enviromental);
         return (
           <>
@@ -67,7 +136,7 @@ function Stats({ res, showRes }: StatsProps) {
             />
           </>
         );
-      case 2:
+      case 3:
         chartData = getSeriesAndLabels(res.social);
         return (
           <>
@@ -81,7 +150,7 @@ function Stats({ res, showRes }: StatsProps) {
             />
           </>
         );
-      case 3:
+      case 4:
         chartData = getSeriesAndLabels(res.governance);
         return (
           <>
@@ -95,14 +164,14 @@ function Stats({ res, showRes }: StatsProps) {
             />
           </>
         );
-      case 4:
+      case 5:
         return (
           <>
-            <h5>{`${res.companyName} Overall Stats`}</h5>
-            <Container>
+            <h5>{`Overall Findings for This Document`}</h5>
+            <Container className="overallStats">
               <Row>
                 <Col>
-                  <h6>Top ESG Involvement</h6>
+                  <h6>Document Contains Information About</h6>
                   {res.top_5_factors.map((factor: string, key: number) => {
                     return <li key={key}>{factor}</li>;
                   })}
@@ -111,11 +180,8 @@ function Stats({ res, showRes }: StatsProps) {
             </Container>
           </>
         );
-      case 5:
+      case 6:
         setPage(0);
-        return;
-      case -1:
-        setPage(4);
         return;
     }
   };

@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 import classifier
+import classifier_enhanced
 from flask_cors import CORS
 
 from io import StringIO
@@ -74,11 +75,14 @@ def pdf():
     for i in range(len(request.files)):
         file = request.files.get(f"file{i}")
         file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
-        dir = f"{uploads_dir}\\{file.filename}"
-        pdfText += get_pdf_text(dir)
+        dir = f"./uploads/{secure_filename(file.filename)}"
+        dir = dir.replace(" ", "_")
+        pdfText += get_pdf_text(dir) + "\n\n"
 
-    res = classifier.main(pdfText, 3)
+    print(pdfText)
+    res = classifier.main(pdfText, 1)
     res["companyName"] = name
+    res["data"] = classifier_enhanced.main(pdfText)
     return jsonify(res)
 
 @app.route('/text', methods=['POST']) 
@@ -88,6 +92,8 @@ def text():
     
     res = classifier.main(text, 3)
     res["companyName"] = name
+    res["data"] = classifier_enhanced.main(text)
+    res["data"] = classifier_enhanced.main(text)
     return jsonify(res)
 
 @app.route('/url', methods=['POST']) 
@@ -98,4 +104,5 @@ def url():
     
     res = classifier.main(pdfText, 3)
     res["companyName"] = name
+    res["data"] = classifier_enhanced.main(pdfText)
     return jsonify(res)

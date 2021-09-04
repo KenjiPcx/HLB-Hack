@@ -207,7 +207,8 @@ def main(input_data):
     paragraphs = input_data.split("\n\n")
     # print(paragraphs)
     current_para = 1
-    para_and_tag = {"paragraph": [], "tags": []}
+    # para_and_tag = {"paragraph": [], "tags": []}
+    data = []
     for para in paragraphs:
         # print(current_para)
         # print(para)
@@ -217,12 +218,14 @@ def main(input_data):
         else:
             tag = output["top_5_factors"][0]
 
-        para_and_tag["paragraph"].append(para)
-        para_and_tag["tags"].append(tag)
+        temp = {}
+        temp["paragraph"] = para
+        temp["tag"] = tag
+        data.append(temp)
 
         current_para += 1
-    print(para_and_tag)
-    return para_and_tag
+    print(data)
+    return data
 
 
 if __name__ == "__main__":
@@ -281,6 +284,6 @@ and practice, we are one of the worlds largest private training companies.
 """
     from get_pdf_text import get_pdf_text
 
-    input_data = get_pdf_text("./uploads/dummy.pdf")
+    input_data = get_pdf_text("./uploads/CYHI_2021_-_Kickoff_Briefing.pdf")
     print(input_data)
     main(input_data)
