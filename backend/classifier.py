@@ -72,32 +72,32 @@ def main(input_data, size):
         print(total)
 
     factors = [
-        "business_ethics",
-        "data_security",
-        "access_and_affordability",
-        "business_model_resilience",
-        "competitive_behavior",
-        "critical_incident_risk_management",
-        "customer_welfare",
-        "director_removal",
-        "employee_engagement_inclusion_and_diversity",
-        "employee_health_and_safety",
-        "human_rights_and_community_relations",
-        "labor_practices",
-        "management_of_legal_and_regulatory_framework",
-        "physical_impacts_of_climate_change",
-        "product_quality_and_safety",
-        "product_design_and_lifecycle_management",
-        "selling_practices_and_product_labeling",
-        "supply_chain_management",
-        "systemic_chain_management",
-        "waste_and_hazardous_materials_management",
-        "water_and_wastewater_management",
-        "air_quality",
-        "customer_privacy",
-        "ecological_impacts",
-        "energy_management",
-        "ghg_emissions",
+        "Business Ethics",
+        "Data Security",
+        "Access And Affordability",
+        "Business Model Resilience",
+        "Competitive Behavior",
+        "Critical Incident Risk Management",
+        "Customer Welfare",
+        "Director Removal",
+        "Employee Engagement Inclusion And Diversity",
+        "Employee Health and Safety",
+        "Human Rights And Community Relations",
+        "Labor Practices",
+        "Management Of Legal And Regulatory Framework",
+        "Physical Impacts_of Climate Change",
+        "Product Quality and Safety",
+        "Product Design and Lifecycle Management",
+        "Selling Practices and Product Labeling",
+        "Supply Chain Management",
+        "Systemic Chain Management",
+        "Waste and Hazardous Materials Management",
+        "Water And Wastewater Management",
+        "Air Quality",
+        "Customer Privacy",
+        "Ecological Impacts",
+        "Energy Management",
+        "Ghg Emissions",
     ]
 
     data = {"factors": factors, "values": values}
@@ -117,7 +117,7 @@ def main(input_data, size):
     for idx in g:
         total_g += df_unmerged.iloc[idx, 1]
 
-    factors_esg = ["e", "s", "g"]
+    factors_esg = ["Environmental", "Social", "Governance"]
     values_esg = [total_e, total_s, total_g]
     data = {"factors": factors_esg, "values": values_esg}
     df_merged = pd.DataFrame(data=data)
@@ -198,7 +198,8 @@ def main(input_data, size):
         "top_5_factors": factors_sorted,
     }
 
-    return json.dumps(return_json_obj)
+    print(return_json_obj)
+    return return_json_obj
 
 
 if __name__ == "__main__":
@@ -209,4 +210,4 @@ We defined that purpose as our aspiration to provide innovations that improve qu
 people all over the world. We make real what matters. And every Siemens business will serve this purpose, for all our 
 stakeholders  for investors, employees, customers, partners, and societies alike. 
 """
-    main(input_data, 5)
+    main(input_data, 1)
