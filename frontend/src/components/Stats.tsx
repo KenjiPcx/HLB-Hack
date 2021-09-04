@@ -4,6 +4,8 @@ import Fab from "@mui/material/Fab";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import ReactApexChart from "react-apexcharts";
 
 interface StatsProps {
@@ -96,8 +98,28 @@ function Stats({ res, showRes }: StatsProps) {
             />
           </>
         );
-      default:
+      case 4:
+        return (
+          <>
+            <h5>{`${res.companyName} Overall Stats`}</h5>
+            <Container>
+              <Row>
+                <Col>
+                  <h6>Top ESG Involvement</h6>
+                  {res.top_5_factors.map((factor: string, key: number) => {
+                    return <li key={key}>{factor}</li>;
+                  })}
+                </Col>
+              </Row>
+            </Container>
+          </>
+        );
+      case 5:
         setPage(0);
+        return;
+      case -1:
+        setPage(4);
+        return;
     }
   };
 

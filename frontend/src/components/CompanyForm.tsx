@@ -29,7 +29,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
         };
       });
       const res = await axios.post(URL, formData);
-      console.log(res)
+      console.log(res);
       setDisplay((displayData: Display) => {
         return {
           ...displayData,
@@ -56,7 +56,13 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
 
   return (
     <Col xs={11} sm={11} md={9} lg={5} xl={5}>
-      <Form className="companyForm">
+      <Form
+        className="companyForm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <Form.Group
           controlId="formBasicEmail"
           className="mb-4"
