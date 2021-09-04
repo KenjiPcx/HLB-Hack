@@ -226,6 +226,7 @@ def main(input_data):
 
 
 if __name__ == "__main__":
+
     input_data = """
     Even with a 171-year history, we at Siemens keep asking ourselves: What kind of company do we want to be? What is 
 it that drives our 379,000 employees to give their best every day? The answers to these questions lie in our purpose. 
@@ -278,4 +279,8 @@ analytics, software development, and data security are part of all our curricula
 women and men worldwide  currently enrolled in training or two-track programs at Siemens, which combine theory 
 and practice, we are one of the worlds largest private training companies.
 """
+    from get_pdf_text import get_pdf_text
+
+    input_data = get_pdf_text("./uploads/dummy.pdf")
+    print(input_data)
     main(input_data)
