@@ -207,7 +207,7 @@ def main(input_data):
     paragraphs = input_data.split("\n\n")
     # print(paragraphs)
     current_para = 1
-    paragraphs_tags = {}
+    para_and_tag = {"paragraph": [], "tags": []}
     for para in paragraphs:
         # print(current_para)
         # print(para)
@@ -216,13 +216,13 @@ def main(input_data):
             tag = None
         else:
             tag = output["top_5_factors"][0]
-        key = f"para{current_para}"
-        value = tag
-        paragraphs_tags[key] = value
-        current_para += 1
 
-    print(paragraphs_tags)
-    return paragraphs_tags
+        para_and_tag["paragraph"].append(para)
+        para_and_tag["tags"].append(tag)
+
+        current_para += 1
+    print(para_and_tag)
+    return para_and_tag
 
 
 if __name__ == "__main__":
