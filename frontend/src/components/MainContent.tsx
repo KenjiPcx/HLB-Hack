@@ -42,7 +42,7 @@ function MainContent() {
   return (
     <Container className="mainContent">
       <div onClick={resetPage}>
-        <h2>ESG Judger</h2>
+        <h2>ESG Scout</h2>
         <div>Judge How ESG Friendly Companies Are</div>
       </div>
       <Container className="infoContainer">{displayData()}</Container>
