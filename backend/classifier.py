@@ -5,9 +5,9 @@ import requests
 
 
 def main(input_data, size):
-    API_URL = "https://api-inference.huggingface.co/models/limivan/bert-esg"
-    url = "https://huggingface.co/limivan/bert-esg"
-    API_TOKEN = "api_NyUsmLJdCTDdyjRIKxaSEigKVGRWZYRoIL"
+    API_URL = ""
+    url = ""
+    API_TOKEN = ""
     headers = {"Authorization": f"Bearer {API_TOKEN}"}
 
     def query(payload):

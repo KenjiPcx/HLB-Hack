@@ -6,7 +6,7 @@ function TopNavbar() {
   return (
     <Navbar bg="dark" variant="dark" className="topAppBar">
       <Container>
-        <Navbar.Brand href="#home">ESG Judger</Navbar.Brand>
+        <Navbar.Brand href="#home">ESG Scout</Navbar.Brand>
       </Container>
     </Navbar>
   );

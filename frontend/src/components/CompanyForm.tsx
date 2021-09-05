@@ -154,7 +154,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           className="mb-4"
           style={{ textAlign: "left" }}
         >
-          <Form.Label>Select Norm Type</Form.Label>
+          <Form.Label>Select Upload Method</Form.Label>
           <Form.Control
             as="select"
             value={type}
@@ -162,7 +162,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
               setType(e.target.value);
             }}
           >
-            <option value="pdf">Upload PDF File</option>
+            <option value="pdf">PDF File</option>
             <option value="text">Text</option>
             <option value="url">Website URL</option>
           </Form.Control>
@@ -173,7 +173,7 @@ function CompanyForm({ setDisplay }: CompanyFormProps) {
           variant={error ? "danger" : "primary"}
           onClick={handleSubmit}
         >
-          {error ? "Failed" : "Calculate ESG Score"}
+          {error ? "Failed" : "Analyse Document"}
         </Button>
       </Form>
     </Col>
