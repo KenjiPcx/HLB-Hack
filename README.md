@@ -12,7 +12,7 @@ ESG Document Analyser
 ## How It Works
 Upload Documents in pdf, text of webpage url.
 
-![mainPage](https://user-images.githubusercontent.com/56083944/132119951-357f2b9f-cb2b-4655-ad94-f7775e5afb03.jpg)
+![mainPage](https://user-images.githubusercontent.com/56083944/132120445-53f684a3-d2fa-43b9-82bd-c6a17b571b18.jpg)
 
 We will analyze the contents on the webpage and categorize the content of each paragraph using sentiment analysis, you can filter through content of the document by only selecting the topics you want to see.
 
