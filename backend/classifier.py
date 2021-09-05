@@ -85,7 +85,7 @@ def main(input_data, size):
         "Human Rights And Community Relations",
         "Labor Practices",
         "Management Of Legal And Regulatory Framework",
-        "Physical Impacts_of Climate Change",
+        "Physical Impacts of Climate Change",
         "Product Quality and Safety",
         "Product Design and Lifecycle Management",
         "Selling Practices and Product Labeling",
